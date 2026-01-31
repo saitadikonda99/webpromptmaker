@@ -3,10 +3,10 @@ import { DEFAULT_CONFIG } from "./types";
 
 export type PresetKey =
   | "saas-landing"
-  | "indie-dashboard"
-  | "ai-waitlist"
+  | "startup-waitlist"
+  | "analytics-dashboard"
   | "developer-portfolio"
-  | "notion-dashboard";
+  | "ai-tool-landing";
 
 export const PRESETS: Record<PresetKey, Partial<PromptConfig>> = {
   "saas-landing": {
@@ -14,36 +14,39 @@ export const PRESETS: Record<PresetKey, Partial<PromptConfig>> = {
     framework: "nextjs",
     cssFramework: "tailwind",
     components: ["navbar", "hero", "features", "pricing", "faq", "footer"],
-    theme: "system",
-    colorScheme: { primary: "#6366f1", accent: "#22d3ee" },
+    theme: "light",
+    colorScheme: { primary: "#155dfc", accent: "#06b6d4" },
     designStyle: "modern",
     animations: true,
     responsive: true,
     accessibility: true,
+    seo: true,
   },
-  "indie-dashboard": {
-    pageType: "dashboard",
-    framework: "nextjs",
-    cssFramework: "tailwind",
-    components: ["navbar", "sidebar", "stats", "charts", "table", "footer"],
-    theme: "dark",
-    colorScheme: { primary: "#8b5cf6", accent: "#06b6d4" },
-    designStyle: "minimal",
-    animations: true,
-    responsive: true,
-    accessibility: true,
-  },
-  "ai-waitlist": {
+  "startup-waitlist": {
     pageType: "landing",
     framework: "nextjs",
     cssFramework: "tailwind",
     components: ["navbar", "hero", "features", "footer"],
     theme: "dark",
     colorScheme: { primary: "#a855f7", accent: "#ec4899" },
-    designStyle: "glassmorphism",
+    designStyle: "modern",
     animations: true,
     responsive: true,
     accessibility: true,
+    seo: true,
+  },
+  "analytics-dashboard": {
+    pageType: "dashboard",
+    framework: "nextjs",
+    cssFramework: "tailwind",
+    components: ["sidebar", "navbar", "stats", "charts", "table"],
+    theme: "dark",
+    colorScheme: { primary: "#8b5cf6", accent: "#06b6d4" },
+    designStyle: "minimal",
+    animations: true,
+    responsive: true,
+    accessibility: true,
+    seo: false,
   },
   "developer-portfolio": {
     pageType: "portfolio",
@@ -56,18 +59,20 @@ export const PRESETS: Record<PresetKey, Partial<PromptConfig>> = {
     animations: true,
     responsive: true,
     accessibility: true,
+    seo: true,
   },
-  "notion-dashboard": {
-    pageType: "dashboard",
+  "ai-tool-landing": {
+    pageType: "saas",
     framework: "nextjs",
     cssFramework: "tailwind",
-    components: ["navbar", "sidebar", "stats", "table", "footer"],
-    theme: "light",
-    colorScheme: { primary: "#171717", accent: "#737373" },
-    designStyle: "minimal",
-    animations: false,
+    components: ["navbar", "hero", "features", "faq", "footer"],
+    theme: "dark",
+    colorScheme: { primary: "#6366f1", accent: "#22d3ee" },
+    designStyle: "modern",
+    animations: true,
     responsive: true,
     accessibility: true,
+    seo: true,
   },
 };
 

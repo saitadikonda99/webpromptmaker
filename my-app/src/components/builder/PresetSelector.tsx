@@ -14,19 +14,19 @@ export interface PresetSelectorProps {
 }
 
 const PRESET_LABELS: Record<PresetKey, string> = {
-  "saas-landing": "SaaS Landing",
-  "indie-dashboard": "Indie Dashboard",
-  "ai-waitlist": "AI Waitlist",
+  "saas-landing": "SaaS Product Landing",
+  "startup-waitlist": "Startup Waitlist Page",
+  "analytics-dashboard": "Analytics Dashboard",
   "developer-portfolio": "Developer Portfolio",
-  "notion-dashboard": "Notion Dashboard",
+  "ai-tool-landing": "AI Tool Landing Page",
 };
 
 const PRESET_KEYS: PresetKey[] = [
   "saas-landing",
-  "indie-dashboard",
-  "ai-waitlist",
+  "startup-waitlist",
+  "analytics-dashboard",
   "developer-portfolio",
-  "notion-dashboard",
+  "ai-tool-landing",
 ];
 
 export default function PresetSelector({

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { usePromptConfig } from "@/hooks/usePromptConfig";
@@ -19,32 +18,6 @@ export default function Home() {
     setConfig,
     resetSteps,
   } = usePromptConfig();
-
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      const isMod = e.metaKey || e.ctrlKey;
-      const target = e.target as HTMLElement;
-      const inInput =
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.isContentEditable;
-
-      if (isMod && e.key === "c" && !inInput) {
-        e.preventDefault();
-        const prompt = generatePrompt(config);
-        copyToClipboard(prompt).then((ok) =>
-          ok ? toast.success("Prompt copied") : toast.error("Failed to copy")
-        );
-      }
-      if (isMod && e.key === "r") {
-        e.preventDefault();
-        resetConfig();
-        toast.success("Configuration reset");
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [config, resetConfig]);
 
   const handleCopy = () => {
     const prompt = generatePrompt(config);
