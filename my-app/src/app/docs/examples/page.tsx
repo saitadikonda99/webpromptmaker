@@ -4,9 +4,9 @@ import CopyBlock from "@/components/docs/CopyBlock";
 export default function ExamplesPage() {
   return (
     <DocsContent>
-      <h1>Promptus Examples</h1>
+      <h1>WebPromptMaker Examples</h1>
       <p>
-        See how Promptus prompts translate into real builds. Each example shows
+        See how WebPromptMaker prompts translate into real builds. Each example shows
         a typical use case: what you describe, what structure you get, and how
         to use it in your builder. Copy the example prompts below to try them
         in the app.
@@ -58,7 +58,7 @@ export default function ExamplesPage() {
 
       <h2>Developer Portfolio</h2>
       <p>
-        Personal site to showcase projects, skills, and contact. Promptus
+        Personal site to showcase projects, skills, and contact. WebPromptMaker
         helps you get a clean, scannable layout.
       </p>
       <CopyBlock
@@ -92,7 +92,7 @@ export default function ExamplesPage() {
       <ul>
         <li>
           <strong>Dashboard Vibecoding flow:</strong> Choose the Vibecoding
-          builder and a dashboard-style preset. Promptus outputs a prompt
+          builder and a dashboard-style preset. WebPromptMaker outputs a prompt
           broken into steps (e.g. layout shell → sidebar → stats → chart →
           table). You paste step-by-step into Cursor, say &quot;next when
           done&quot;, and the AI builds one piece at a time.

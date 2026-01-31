@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Promptus – AI Builder Prompt Generator",
-  description: "Generate prompts for AI builders. Clean, minimal UI.",
+  title: "WebPromptMaker – AI Builder Prompt Generator",
+  description: "WebPromptMaker generates optimized prompts for AI website builders. Describe your project, configure components, and get ready-to-paste prompts for Lovable, v0, Bolt, Emergent AI, Vibecoding, and more.",
 };
 
 export default function RootLayout({

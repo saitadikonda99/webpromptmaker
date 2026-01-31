@@ -77,7 +77,7 @@ export default function PromptGuidePage() {
         <li>Start with one sentence: what is this page or app for?</li>
         <li>List the sections you want (navbar, hero, features, etc.) so nothing is forgotten.</li>
         <li>Mention design style and one or two behavior needs (responsive, dark mode, animations).</li>
-        <li>Use PromptForge&apos;s project description and presets to get a structured prompt, then tweak.</li>
+        <li>Use WebPromptMaker&apos;s project description and presets to get a structured prompt, then tweak.</li>
         <li>For step-by-step control, use Vibecoding mode and one section per step.</li>
       </ul>
     </DocsContent>

@@ -46,7 +46,7 @@ export default function DocsHeader({
         href="/docs"
         className="shrink-0 text-sm font-semibold text-foreground transition-opacity hover:opacity-80"
       >
-        Promptus Docs
+        WebPromptMaker Docs
       </Link>
 
       {/* Search input */}

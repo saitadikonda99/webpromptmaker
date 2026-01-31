@@ -18,7 +18,7 @@ export default function VibecodingPage() {
       <p>The process repeats for each step:</p>
       <ul>
         <li>
-          <strong>Generate step</strong> — Use PromptForge in Vibecoding mode to
+          <strong>Generate step</strong> — Use WebPromptMaker in Vibecoding mode to
           get one step (e.g. &quot;STEP 2 — Navbar&quot;) with a paste-ready
           prompt and commit message.
         </li>

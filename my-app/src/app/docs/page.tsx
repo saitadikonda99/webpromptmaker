@@ -37,9 +37,9 @@ const DOC_CARDS = [
 export default function DocsPage() {
   return (
     <DocsContent>
-      <h1>Promptus Documentation</h1>
+      <h1>WebPromptMaker Documentation</h1>
       <p>
-        Promptus helps you generate optimized prompts for AI website builders.
+        WebPromptMaker helps you generate optimized prompts for AI website builders.
         Describe your project, configure components and style, then copy or
         download a prompt tailored to Lovable, v0, Bolt, Emergent AI, Vibecoding, or generic
         AI tools. This documentation explains how to get started, use each

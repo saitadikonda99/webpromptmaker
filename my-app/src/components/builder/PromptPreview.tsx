@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const EXPORT_FILENAME = "promptus-config.json";
+const EXPORT_FILENAME = "webpromptmaker-config.json";
 
 export interface PromptPreviewProps {
   config: PromptConfig;

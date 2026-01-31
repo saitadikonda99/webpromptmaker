@@ -37,7 +37,7 @@ export default function DocsSidebar({
           ← Back to app
         </Link>
         <h2 className="px-3 py-2 text-sm font-semibold text-foreground">
-          Promptus Docs
+          WebPromptMaker Docs
         </h2>
         <nav className="flex flex-col gap-0.5" aria-label="Documentation">
           {links.length === 0 ? (

@@ -9,8 +9,8 @@ import {
   normalizePromptConfig,
 } from "@/lib/types";
 
-const STORAGE_KEY = "promptus-prompt-config";
-const STEP_STORAGE_KEY = "promptus-current-step";
+const STORAGE_KEY = "webpromptmaker-prompt-config";
+const STEP_STORAGE_KEY = "webpromptmaker-current-step";
 
 const MIN_STEP = 1;
 

@@ -22,7 +22,7 @@ export default function Home() {
       <header className="flex shrink-0 items-center justify-between bg-background px-5 py-4 md:px-8">
         <div className="flex items-center gap-3">
           <span className="text-xl font-bold tracking-tight text-foreground">
-            Promptus
+            WebPromptMaker
           </span>
           <span className="text-sm text-muted-foreground">|</span>
           <span className="text-sm text-muted-foreground">

@@ -3,17 +3,17 @@ import DocsContent from "@/components/docs/DocsContent";
 export default function GettingStartedPage() {
   return (
     <DocsContent>
-      <h1>Getting Started with PromptForge</h1>
+      <h1>Getting Started with WebPromptMaker</h1>
 
-      <h2>What is PromptForge?</h2>
+      <h2>What is WebPromptMaker?</h2>
       <p>
-        PromptForge generates optimized prompts for AI website builders. You
+        WebPromptMaker generates optimized prompts for AI website builders. You
         describe your project, pick components and style, and get ready-to-paste
         prompts tailored to your chosen builder (Lovable, v0, Bolt, Emergent AI, Vibecoding,
         or generic AI).
       </p>
 
-      <h2>How PromptForge Works</h2>
+      <h2>How WebPromptMaker Works</h2>
       <p>
         The workflow is simple: describe your project in your own words,
         configure page type and components, then generate prompts. Use those
@@ -50,7 +50,7 @@ export default function GettingStartedPage() {
       </ol>
 
       <h2>Supported Builders</h2>
-      <p>PromptForge can tailor prompts for:</p>
+      <p>WebPromptMaker can tailor prompts for:</p>
       <ul>
         <li>Lovable</li>
         <li>v0</li>

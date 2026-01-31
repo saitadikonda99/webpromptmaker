@@ -7,7 +7,7 @@ export default function BuildersPage() {
 
       <h2>Supported Builders</h2>
       <p>
-        PromptForge supports multiple AI website builders. Each builder mode
+        WebPromptMaker supports multiple AI website builders. Each builder mode
         tailors the generated prompt to that tool&apos;s conventions and
         strengths. Supported builders:
       </p>
