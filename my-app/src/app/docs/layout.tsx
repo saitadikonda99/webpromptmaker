@@ -6,6 +6,7 @@ import DocsHeader from "@/components/docs/DocsHeader";
 import DocsSidebar from "@/components/docs/DocsSidebar";
 import DocsPageNav from "@/components/docs/DocsPageNav";
 import DocsToc from "@/components/docs/DocsToc";
+import DocsHeadingAnchors from "@/components/docs/DocsHeadingAnchors";
 
 export default function DocsLayout({
   children,
@@ -53,6 +54,7 @@ export default function DocsLayout({
             id="docs-content"
             className="min-h-0 min-w-0 flex-1 overflow-y-auto scrollbar-hide px-4 py-8 md:px-8 md:py-10 max-w-3xl"
           >
+            <DocsHeadingAnchors />
             {children}
             <DocsPageNav />
           </div>

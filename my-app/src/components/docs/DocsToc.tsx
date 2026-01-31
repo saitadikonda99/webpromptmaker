@@ -76,7 +76,7 @@ export default function DocsToc({ className }: DocsTocProps) {
           scanHeadings();
         })
       : null;
-    if (container) {
+    if (container && mo) {
       mo.observe(container, { childList: true, subtree: true });
     }
     return () => {
@@ -89,16 +89,17 @@ export default function DocsToc({ className }: DocsTocProps) {
   // Intersection Observer: highlight visible section (root = scroll container so last heading works)
   useEffect(() => {
     if (items.length === 0) return;
-    const container = document.getElementById(CONTENT_ID);
-    if (!container) return;
+    const raw = document.getElementById(CONTENT_ID);
+    if (!raw) return;
+    const containerEl: HTMLElement = raw;
 
     function setActiveFromVisible() {
-      const containerRect = container.getBoundingClientRect();
+      const containerRect = containerEl.getBoundingClientRect();
       const topOffset = 100;
       // When scrolled to bottom, prefer last section so it stays highlighted
       const nearBottom =
         items.length > 0 &&
-        container.scrollHeight - container.scrollTop - container.clientHeight < 80;
+        containerEl.scrollHeight - containerEl.scrollTop - containerEl.clientHeight < 80;
       if (nearBottom && items.length > 0) {
         setActiveId(items[items.length - 1].id);
         return;
@@ -134,7 +135,7 @@ export default function DocsToc({ className }: DocsTocProps) {
         if (id) setActiveId(id);
       },
       {
-        root: container,
+        root: containerEl,
         rootMargin: "-80px 0px 0px 0px",
         threshold: [0, 0.1, 0.5, 1],
       }
@@ -146,12 +147,12 @@ export default function DocsToc({ className }: DocsTocProps) {
     });
 
     requestAnimationFrame(setActiveFromVisible);
-    container.addEventListener("scroll", setActiveFromVisible, { passive: true });
+    containerEl.addEventListener("scroll", setActiveFromVisible, { passive: true });
     const raf = requestAnimationFrame(() => setActiveFromVisible());
 
     return () => {
       observer.disconnect();
-      container.removeEventListener("scroll", setActiveFromVisible);
+      containerEl.removeEventListener("scroll", setActiveFromVisible);
       cancelAnimationFrame(raf);
     };
   }, [items]);
