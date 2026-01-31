@@ -6,6 +6,7 @@ export const DOC_PAGES = [
   { href: "/docs/vibecoding", label: "Vibecoding Guide" },
   { href: "/docs/builders", label: "AI Builders Guide" },
   { href: "/docs/prompt-guide", label: "Prompt Writing Guide" },
+  { href: "/docs/changelog", label: "Changelog" },
 ] as const;
 
 export const DOCS_ORDER = DOC_PAGES.map((p) => p.href);

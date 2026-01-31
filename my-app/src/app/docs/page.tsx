@@ -50,6 +50,12 @@ export default function DocsPage() {
           </Link>
           — How to write better prompts.
         </li>
+        <li>
+          <Link href="/docs/changelog">
+            Changelog
+          </Link>
+          — Release history and updates.
+        </li>
       </ul>
 
       <h2>Next Steps</h2>
