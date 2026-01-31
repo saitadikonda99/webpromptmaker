@@ -41,18 +41,18 @@ export function formatComponents(components: Component[]): string {
   return components.map((c) => `- ${componentLabel(c)}`).join("\n");
 }
 
-/** Short detail description per component. */
+/** Detailed component descriptions: layout, purpose, UI structure, interaction hints. */
 const COMPONENT_DETAIL_MAP: Record<Component, string> = {
-  navbar: "Logo, nav links, optional CTA",
-  sidebar: "Nav links, collapsible on mobile",
-  hero: "Headline, subtext, primary CTA",
-  features: "Grid layout of feature cards",
-  pricing: "Pricing tiers with comparison",
-  faq: "Accordion-style Q&A",
-  footer: "Links, social icons, copyright",
-  stats: "Metrics / KPIs display",
-  charts: "Chart components (e.g. line, bar)",
-  table: "Data table with sort/filter",
+  navbar: "Fixed top bar. Logo (left), nav links (center/right), CTA button. Mobile: hamburger menu with slide-out drawer. Sticky on scroll.",
+  sidebar: "Left-side vertical nav. Icon + label links, collapsible groups. Mobile: overlay drawer with backdrop. Active state highlighting.",
+  hero: "Full-width section. Large headline (h1), supporting subtext, primary CTA button, optional secondary CTA. Background image or gradient. Centered or left-aligned layout.",
+  features: "3-column responsive grid (1 col mobile, 2 col tablet, 3 col desktop). Each card: icon (top), title (h3), description paragraph. Consistent card height, subtle hover lift.",
+  pricing: "2-3 tier horizontal cards. Each tier: plan name, price, feature list (checkmarks), CTA button. Highlight recommended tier with border/badge. Mobile: vertical stack.",
+  faq: "Accordion component. Question as trigger, answer expands below. One open at a time or multi-open. Chevron icon rotates on toggle. Smooth height animation.",
+  footer: "Multi-column layout. Logo + tagline, link groups (Product, Company, Legal), social icons row, copyright line. Mobile: stacked single column.",
+  stats: "Horizontal row of metric cards (2-4). Each: large number, label, optional trend indicator (up/down arrow + percentage). Mobile: 2-column grid.",
+  charts: "Chart container with title, legend, and responsive chart (line/bar/pie). Use charting library (Recharts, Chart.js). Include loading and empty states.",
+  table: "Data table with column headers, sortable columns, row hover, pagination or infinite scroll. Mobile: horizontal scroll or card view. Filter/search input above.",
 };
 
 /** Build structured component detail descriptions. */
@@ -61,8 +61,8 @@ function buildComponentDetails(components: Component[]): string {
     return "";
   }
   return components
-    .map((c) => `${componentLabel(c)} → ${COMPONENT_DETAIL_MAP[c]}`)
-    .join("\n");
+    .map((c) => `**${componentLabel(c)}:** ${COMPONENT_DETAIL_MAP[c]}`)
+    .join("\n\n");
 }
 
 /** Remove repeated blank lines; keep at most one newline between lines. */
@@ -91,9 +91,15 @@ export function generatePrompt(config: PromptConfig): string {
     [PLACEHOLDERS.DESIGN_STYLE]: config.designStyle,
     [PLACEHOLDERS.COMPONENTS_LIST]: componentsList,
     [PLACEHOLDERS.COMPONENT_DETAILS]: componentDetails,
-    [PLACEHOLDERS.RESPONSIVE]: config.responsive ? "Responsive (mobile-first)" : "Fixed layout",
-    [PLACEHOLDERS.ANIMATIONS]: config.animations ? "Include subtle animations" : "No animations",
-    [PLACEHOLDERS.ACCESSIBILITY]: config.accessibility ? "WCAG-aware, semantic HTML, ARIA where needed" : "Basic markup",
+    [PLACEHOLDERS.RESPONSIVE]: config.responsive 
+      ? "Mobile-first responsive. Breakpoints: sm (640px), md (768px), lg (1024px), xl (1280px). Stack on mobile, expand on desktop." 
+      : "Fixed desktop layout (1024px+ optimized)",
+    [PLACEHOLDERS.ANIMATIONS]: config.animations 
+      ? "Subtle animations: fade-in on scroll, hover scale/lift, smooth transitions (150-300ms ease-out), loading skeletons" 
+      : "No animations. Static UI only.",
+    [PLACEHOLDERS.ACCESSIBILITY]: config.accessibility 
+      ? "WCAG 2.1 AA: semantic HTML, ARIA labels, keyboard navigation, focus indicators, color contrast 4.5:1+, screen reader friendly" 
+      : "Standard HTML markup",
     [PLACEHOLDERS.OUTPUT_FORMAT]: config.outputFormat,
   };
 

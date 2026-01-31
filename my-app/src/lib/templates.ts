@@ -18,131 +18,212 @@ const PLACEHOLDERS = {
 } as const;
 
 const BASE_BODY = `
+## Project Overview
 **Page type:** {{PAGE_TYPE}}
+**Stack:** {{FRAMEWORK}} + {{CSS_FRAMEWORK}}
+**Theme:** {{THEME}} · Primary: {{PRIMARY_COLOR}} · Accent: {{ACCENT_COLOR}} · Style: {{DESIGN_STYLE}}
 
-**Stack:** {{FRAMEWORK}} with {{CSS_FRAMEWORK}} for styling.
+## Architecture
+- **Component-based structure:** One file per section, reusable UI primitives (Button, Card, Input, etc.).
+- **Folder organization:**
+  \`\`\`
+  components/ui/    → Reusable primitives (Button, Card, Badge, etc.)
+  components/       → Composite components (Navbar, Hero, etc.)
+  app/ or pages/    → Route-level pages
+  lib/              → Utilities, hooks, constants
+  \`\`\`
+- **Naming:** PascalCase for components, camelCase for functions/variables, kebab-case for files.
+- **No duplication:** Extract repeated patterns into shared components.
 
-**Theme:** {{THEME}}. Primary color: {{PRIMARY_COLOR}}, accent: {{ACCENT_COLOR}}. Design style: {{DESIGN_STYLE}}.
+## Design System
+- **Spacing:** Consistent scale (4px base: p-4, gap-6, my-8). Sections: py-16 to py-24.
+- **Typography hierarchy:** h1 (hero) → h2 (section titles) → h3 (card titles) → body text. Max line-width ~65ch for readability.
+- **Colors:** Use CSS variables or theme tokens. Primary for CTAs, accent for highlights, muted for secondary text.
+- **Mobile-first:** Design for 320px+ first, enhance for tablet (768px) and desktop (1024px+).
 
-**Sections to build (component-based):** {{COMPONENTS_LIST}}
+## Sections to Build
+{{COMPONENTS_LIST}}
 
+## Component Specifications
 {{COMPONENT_DETAILS}}
 
-**Requirements:**
-- Use a component-based architecture: one component per section, reusable UI primitives, clear separation of concerns.
-- Write clean, production-ready code. Prefer composition over duplication.
-- Layout: {{RESPONSIVE}}
-- Animations: {{ANIMATIONS}}
-- Accessibility: {{ACCESSIBILITY}}
-- Output: {{OUTPUT_FORMAT}}
+## Requirements
+- **Layout:** {{RESPONSIVE}}
+- **Animations:** {{ANIMATIONS}}
+- **Accessibility:** {{ACCESSIBILITY}}
+- **Code quality:** Clean naming, no duplication, separation of concerns, typed props.
+- **Output:** {{OUTPUT_FORMAT}}
 `.trim();
 
-const LOVABLE = `You are building a production-ready {{PAGE_TYPE}} app. Ship something users can deploy and iterate on quickly.
+const LOVABLE = `# Lovable Prompt — {{PAGE_TYPE}}
+
+Build a **production-ready, beautifully polished** {{PAGE_TYPE}} application. Focus on design excellence and deploy-ready code.
 
 ${BASE_BODY}
+
+## Lovable-Specific Guidelines
+- **Design polish:** Pixel-perfect spacing, smooth transitions (150-300ms), subtle shadows and hover states.
+- **Visual hierarchy:** Clear focus areas, balanced whitespace, consistent rhythm.
+- **Production-ready:** Error states, loading states, empty states for all interactive components.
+- **Micro-interactions:** Button hover/active states, input focus rings, smooth accordion/dropdown animations.
+- **Ship-ready:** No placeholder content—use realistic copy and images.
 `.trim();
 
-const V0 = `Generate a high-quality {{PAGE_TYPE}} UI. Follow modern patterns and v0-style component structure.
+const V0 = `# v0 Prompt — {{PAGE_TYPE}}
+
+Generate a **high-quality, modern** {{PAGE_TYPE}} UI following v0 and shadcn/ui patterns.
 
 ${BASE_BODY}
+
+## v0-Specific Guidelines
+- **Use shadcn/ui components:** Button, Card, Input, Dialog, Sheet, Tabs, etc. Import from \`@/components/ui\`.
+- **App Router patterns:** Use \`app/\` directory, Server Components by default, \`"use client"\` only when needed.
+- **TypeScript:** Strict types, interfaces for props, no \`any\`. Use \`React.FC\` or typed function components.
+- **Styling:** Tailwind CSS with \`cn()\` utility for conditional classes. Follow shadcn/ui class conventions.
+- **File structure:**
+  \`\`\`
+  app/              → Routes and layouts
+  components/ui/    → shadcn/ui primitives
+  components/       → Feature components
+  lib/utils.ts      → cn() and helpers
+  \`\`\`
+- **Patterns:** Composition over inheritance, forwardRef for reusable components, Radix primitives for accessibility.
 `.trim();
 
-const BOLT = `Create a {{PAGE_TYPE}} experience optimized for the Bolt stack. Focus on fast iteration and clear structure.
+const BOLT = `# Bolt Prompt — {{PAGE_TYPE}}
+
+Create a **full-stack** {{PAGE_TYPE}} application optimized for rapid iteration and clear structure.
 
 ${BASE_BODY}
+
+## Bolt-Specific Guidelines
+- **Full-stack structure:**
+  \`\`\`
+  app/
+    api/            → API routes (Route Handlers)
+    (routes)/       → Page routes
+  components/       → UI components
+  lib/
+    db.ts           → Database client
+    actions.ts      → Server actions
+  \`\`\`
+- **API routes:** Use Next.js Route Handlers (\`route.ts\`) for REST endpoints. Return typed JSON responses.
+- **Server Actions:** Use \`"use server"\` for mutations. Validate input, handle errors gracefully.
+- **Data fetching:** Server Components fetch data directly. Client Components use SWR or React Query.
+- **Database:** Prisma or Drizzle ORM. Type-safe queries, migrations for schema changes.
+- **Error handling:** Try-catch in API routes, error boundaries in UI, user-friendly error messages.
 `.trim();
 
 const VIBECODING_BODY = `
+## Project Overview
 **Page type:** {{PAGE_TYPE}}
+**Stack:** {{FRAMEWORK}} + {{CSS_FRAMEWORK}}
+**Theme:** {{THEME}} · Primary: {{PRIMARY_COLOR}} · Accent: {{ACCENT_COLOR}} · Style: {{DESIGN_STYLE}}
 
-**Stack:** {{FRAMEWORK}} with {{CSS_FRAMEWORK}} for styling.
+## Sections to Build
+{{COMPONENTS_LIST}}
 
-**Theme:** {{THEME}}. Primary color: {{PRIMARY_COLOR}}, accent: {{ACCENT_COLOR}}. Design style: {{DESIGN_STYLE}}.
-
-**Sections to build (component-based):** {{COMPONENTS_LIST}}
-
+## Component Specifications
 {{COMPONENT_DETAILS}}
 
 ---
 
-**Development Flow** (build in this order):
-1. Create components — one file per section, reusable primitives.
-2. Build layout — compose sections into the main page/layout.
-3. Add sections — wire each section into the layout in order.
-4. Connect styles — apply {{CSS_FRAMEWORK}}, theme, and design tokens.
-5. Finalize responsiveness — breakpoints, touch targets, overflow.
-
----
-
-**Project Structure** (expected folders):
+## Project Structure
 \`\`\`
-components/   # Shared UI primitives (Button, Card, etc.)
-sections/     # Page sections (Navbar, Hero, Features, etc.)
-pages/        # Route-level pages that compose sections
-styles/       # Global CSS, theme, design tokens
+components/
+  ui/           → Reusable primitives (Button, Card, Input)
+  [SectionName].tsx → Section components (Navbar, Hero, etc.)
+app/ or pages/  → Route-level pages
+lib/            → Utilities, hooks, constants
+styles/         → Global CSS, theme tokens
 \`\`\`
 
+## Development Order
+1. **Project setup** — Initialize project, install dependencies, folder structure.
+2. **Layout shell** — Create main layout with header/sidebar/content areas.
+3. **Sections** — Build each section in order: {{COMPONENTS_LIST}}
+4. **Styling pass** — Apply {{CSS_FRAMEWORK}} classes, theme colors, spacing.
+5. **Responsiveness** — Mobile breakpoints, touch targets, overflow handling.
+6. **Polish** — Animations, hover states, loading states, final QA.
+
 ---
 
-**Implementation step order** (use this order; show ONE step at a time):
-Layout first → then sections in order: navbar, sidebar, stats, charts, table, hero, features, pricing, faq, footer → then polish. Only include steps for sections the user selected: {{COMPONENTS_LIST}}
+## Cursor Workflow Format
 
----
+**Each step must follow this exact structure:**
 
-**Cursor workflow format** (use this exact structure for every step):
-
-1. Step header:
-✅ STEP X — [Title]
-
-2. Cursor Prompt section:
-🧠 Cursor Prompt
-Output implementation instructions inside a single code block. No conversational text inside the block — only the prompt the developer pastes into Cursor.
-
-3. Commit Message section:
-✅ Commit Message
-Provide the commit message inside a code block.
-
-4. Ending line:
-Say next when done.
-
-**Rules**
-- Only show ONE step at a time. Never reveal future steps.
-- Never output code (no implementation code). Only builder instructions.
-- Maintain consistent formatting for every step.
-- No conversational text inside the Cursor Prompt code block.
-
-**Example (Step 1):**
-
-✅ STEP 1 — Setup Dashboard Layout
+\`\`\`
+✅ STEP [N] — [Section/Task Name]
 
 🧠 Cursor Prompt
-
 \`\`\`
-Create {{PAGE_TYPE}} layout with Navbar, Sidebar and main content area. Use {{FRAMEWORK}} and {{CSS_FRAMEWORK}}. Layout must support responsive collapse for sidebar. Set up folders: components/, sections/, pages/, styles/.
+[Paste-ready instructions for Cursor. Be specific:
+- What component to create
+- What props/structure it needs
+- Layout and styling requirements
+- Mobile behavior
+- No code—only clear builder instructions]
 \`\`\`
 
 ✅ Commit Message
-
 \`\`\`
-chore: add dashboard layout and folder structure
+[type]: [short description]
 \`\`\`
 
-Say next when done.
+Say **next** when done.
+\`\`\`
 
 ---
 
-**Output**
-Show ONLY the first step. Use the Cursor workflow format above. One step at a time. Never future steps. Never code. Only builder instructions. End with "Say next when done." Layout: {{RESPONSIVE}}. Animations: {{ANIMATIONS}}. Accessibility: {{ACCESSIBILITY}}. Format: {{OUTPUT_FORMAT}}
+## Rules
+- **One step at a time.** Never reveal future steps.
+- **No code.** Output only builder instructions that Cursor can execute.
+- **Paste-ready prompts.** The Cursor Prompt block should be copy-paste ready.
+- **Consistent format.** Every step uses the exact structure above.
+- **Specific instructions.** Include layout, spacing, colors, responsive behavior.
+
+---
+
+## Settings
+- **Layout:** {{RESPONSIVE}}
+- **Animations:** {{ANIMATIONS}}
+- **Accessibility:** {{ACCESSIBILITY}}
+- **Output:** {{OUTPUT_FORMAT}}
+
+---
+
+## Start
+Output **STEP 1** now. Follow the format exactly. End with "Say **next** when done."
 `.trim();
 
-const VIBECODING = `You are a Cursor workflow mentor for a {{PAGE_TYPE}} application. Output must follow Cursor-style step guidance only — not conversational instructions. Use the exact format: ✅ STEP X — Title, 🧠 Cursor Prompt (instructions in a code block), ✅ Commit Message (in a code block), Say next when done. Show only ONE step at a time. Never reveal future steps. Never output code. Only builder instructions. Consistent formatting every step.
+const VIBECODING = `# Vibecoding Workflow — {{PAGE_TYPE}}
+
+You are a **Cursor workflow mentor**. Guide the developer through building a {{PAGE_TYPE}} application step-by-step.
+
+**Output format:** Structured steps only. No conversational text. Each step: ✅ STEP N — Title, 🧠 Cursor Prompt (in code block), ✅ Commit Message (in code block), "Say next when done."
+
+**Critical rules:**
+- Show **ONE step at a time**
+- **Never output code** — only builder instructions
+- **Paste-ready prompts** — specific, actionable, no ambiguity
+- **Consistent formatting** every step
 
 ${VIBECODING_BODY}
 `.trim();
 
-const GENERIC = `Produce a professional {{PAGE_TYPE}} application. Use a component-based architecture and write clean, reusable code.
+const GENERIC = `# {{PAGE_TYPE}} Application
+
+Build a **professional, well-structured** {{PAGE_TYPE}} application with clean architecture and maintainable code.
 
 ${BASE_BODY}
+
+## General Best Practices
+- **Framework-agnostic patterns:** Use standard component patterns that work across React, Vue, Svelte.
+- **State management:** Local state for UI, lift state up for shared data, context/stores for global state.
+- **Separation of concerns:** UI components separate from business logic and data fetching.
+- **Performance:** Lazy-load heavy components, optimize images, minimize bundle size.
+- **Testing:** Components should be testable in isolation. Pure functions for utilities.
+- **Documentation:** Clear component props, JSDoc for complex functions, README for setup.
 `.trim();
 
 const TEMPLATES: Record<BuilderMode, string> = {

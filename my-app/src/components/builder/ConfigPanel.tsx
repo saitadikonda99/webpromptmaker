@@ -59,10 +59,13 @@ export default function ConfigPanel({
 
       {/* Theme Section */}
       <section className="p-5">
-        <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground">
-          <Palette className="size-4 text-primary" aria-hidden />
-          Theme
-        </h3>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Palette className="size-4 text-primary" aria-hidden />
+            Theme
+          </h3>
+          <span className="text-xs text-muted-foreground">Colors & mode</span>
+        </div>
         <ThemeSection config={config} updateConfig={updateConfig} />
       </section>
 
