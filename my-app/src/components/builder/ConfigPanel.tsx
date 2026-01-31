@@ -27,7 +27,7 @@ export default function ConfigPanel({
         <h2 className="text-sm font-medium text-foreground">Configuration</h2>
       </header>
 
-      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
+      <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto scroll-smooth">
         <div className="space-y-6 p-4 pb-8">
           <Card>
             <CardHeader>

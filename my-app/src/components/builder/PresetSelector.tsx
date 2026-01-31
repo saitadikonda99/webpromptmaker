@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import type { PromptConfig } from "@/lib/types";
 import { applyPreset, type PresetKey, PRESETS } from "@/lib/presets";
 import { Button } from "@/components/ui/button";
@@ -39,11 +40,13 @@ export default function PresetSelector({
     const next = applyPreset(config, PRESETS[key]);
     updateConfig(next);
     setActiveKey(key);
+    toast.success("Preset applied");
   }
 
   function handleReset() {
     resetConfig();
     setActiveKey(null);
+    toast.success("Configuration reset");
   }
 
   return (
@@ -56,10 +59,12 @@ export default function PresetSelector({
             variant={activeKey === key ? "default" : "outline"}
             size="sm"
             className={cn(
-              "h-auto py-2 text-left font-normal",
+              "h-auto py-2 text-left font-normal transition-colors duration-150",
               activeKey === key && "ring-2 ring-primary ring-offset-2"
             )}
             onClick={() => handlePreset(key)}
+            aria-label={`Apply ${PRESET_LABELS[key]} preset`}
+            aria-pressed={activeKey === key}
           >
             {PRESET_LABELS[key]}
           </Button>
@@ -69,8 +74,9 @@ export default function PresetSelector({
         type="button"
         variant="ghost"
         size="sm"
-        className="text-muted-foreground"
+        className="text-muted-foreground transition-colors duration-150"
         onClick={handleReset}
+        aria-label="Reset configuration to default"
       >
         Reset to default
       </Button>
