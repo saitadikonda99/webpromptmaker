@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { toast } from "sonner";
 import type { BuilderMode, PromptConfig } from "@/lib/types";
+import { parseImportedConfig } from "@/lib/types";
 import { generatePrompt } from "@/lib/prompt-generator";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,9 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const EXPORT_FILENAME = "promptforge-config.json";
+
 export interface PromptPreviewProps {
   config: PromptConfig;
   updateConfig: (partial: Partial<PromptConfig>) => void;
+  setConfig?: (config: PromptConfig) => void;
+  resetSteps?: () => void;
 }
 
 const BUILDER_MODE_OPTIONS: { value: BuilderMode; label: string }[] = [
@@ -60,12 +65,64 @@ function handleShare(config: PromptConfig): void {
   }
 }
 
+function handleExportConfig(config: PromptConfig): void {
+  try {
+    const json = JSON.stringify(config, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = EXPORT_FILENAME;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Configuration exported.");
+  } catch {
+    toast.error("Failed to export configuration");
+  }
+}
+
+function handleImportConfig(
+  file: File,
+  setConfig: (config: PromptConfig) => void,
+  resetSteps: () => void
+): void {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const raw = JSON.parse(reader.result as string) as unknown;
+      const parsed = parseImportedConfig(raw);
+      if (parsed) {
+        setConfig(parsed);
+        resetSteps();
+        toast.success("Configuration imported.");
+      } else {
+        toast.error("Invalid configuration file.");
+      }
+    } catch {
+      toast.error("Invalid configuration file.");
+    }
+  };
+  reader.onerror = () => toast.error("Invalid configuration file.");
+  reader.readAsText(file, "utf-8");
+}
+
 export default function PromptPreview({
   config,
   updateConfig,
+  setConfig,
+  resetSteps,
 }: PromptPreviewProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const prompt = useMemo(() => generatePrompt(config), [config]);
   const charCount = prompt.length;
+
+  const onImportClick = () => fileInputRef.current?.click();
+  const onImportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || !setConfig || !resetSteps) return;
+    handleImportConfig(file, setConfig, resetSteps);
+  };
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-4 animate-in fade-in duration-200">
@@ -118,6 +175,14 @@ export default function PromptPreview({
       </div>
 
       <footer className="flex shrink-0 flex-wrap items-center gap-2 border-t border-border pt-4">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json,application/json"
+          className="hidden"
+          aria-hidden
+          onChange={onImportChange}
+        />
         <Button
           type="button"
           variant="outline"
@@ -147,6 +212,27 @@ export default function PromptPreview({
           aria-label="Copy share link to clipboard"
         >
           Share link
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="transition-colors duration-150"
+          onClick={() => handleExportConfig(config)}
+          aria-label="Export configuration as JSON"
+        >
+          Export Config
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="transition-colors duration-150"
+          onClick={onImportClick}
+          disabled={!setConfig || !resetSteps}
+          aria-label="Import configuration from JSON file"
+        >
+          Import Config
         </Button>
       </footer>
     </div>

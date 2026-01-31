@@ -8,7 +8,8 @@ import ConfigPanel from "@/components/builder/ConfigPanel";
 import PromptPreview from "@/components/builder/PromptPreview";
 
 export default function Home() {
-  const { config, updateConfig, toggleComponent, resetConfig } = usePromptConfig();
+  const { config, updateConfig, toggleComponent, resetConfig, setConfig, resetSteps } =
+    usePromptConfig();
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -62,7 +63,12 @@ export default function Home() {
         </h2>
         <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto scroll-smooth">
           <div className="p-4">
-            <PromptPreview config={config} updateConfig={updateConfig} />
+            <PromptPreview
+              config={config}
+              updateConfig={updateConfig}
+              setConfig={setConfig}
+              resetSteps={resetSteps}
+            />
           </div>
         </div>
       </section>
