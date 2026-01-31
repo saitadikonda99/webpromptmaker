@@ -1,11 +1,24 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { BuilderMode, PromptConfig } from "@/lib/types";
 import { parseImportedConfig } from "@/lib/types";
+import {
+  trackEvent,
+  getAnalytics,
+  clearAnalytics,
+  type AnalyticsEvent,
+} from "@/lib/analytics";
 import { generatePrompt } from "@/lib/prompt-generator";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -33,7 +46,10 @@ const BUILDER_MODE_OPTIONS: { value: BuilderMode; label: string }[] = [
 
 function handleCopy(prompt: string): void {
   navigator.clipboard.writeText(prompt).then(
-    () => toast.success("Copied to clipboard"),
+    () => {
+      trackEvent("prompt_copied");
+      toast.success("Copied to clipboard");
+    },
     () => toast.error("Failed to copy")
   );
 }
@@ -57,7 +73,10 @@ function handleShare(config: PromptConfig): void {
     const encoded = encodeURIComponent(base64);
     const url = `${window.location.origin}${window.location.pathname}?config=${encoded}`;
     navigator.clipboard.writeText(url).then(
-      () => toast.success("Share link copied to clipboard"),
+      () => {
+        trackEvent("share_link_created");
+        toast.success("Share link copied to clipboard");
+      },
       () => toast.error("Failed to copy link")
     );
   } catch {
@@ -75,6 +94,7 @@ function handleExportConfig(config: PromptConfig): void {
     a.download = EXPORT_FILENAME;
     a.click();
     URL.revokeObjectURL(url);
+    trackEvent("config_exported");
     toast.success("Configuration exported.");
   } catch {
     toast.error("Failed to export configuration");
@@ -94,6 +114,7 @@ function handleImportConfig(
       if (parsed) {
         setConfig(parsed);
         resetSteps();
+        trackEvent("config_imported");
         toast.success("Configuration imported.");
       } else {
         toast.error("Invalid configuration file.");
@@ -116,12 +137,35 @@ export default function PromptPreview({
   const prompt = useMemo(() => generatePrompt(config), [config]);
   const charCount = prompt.length;
 
+  useEffect(() => {
+    if (prompt.length > 0) {
+      trackEvent("prompt_generated", { componentCount: config.components.length });
+    }
+  }, [
+    config.components,
+    config.pageType,
+    config.framework,
+    config.builderMode,
+    prompt,
+  ]);
+
   const onImportClick = () => fileInputRef.current?.click();
   const onImportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file || !setConfig || !resetSteps) return;
     handleImportConfig(file, setConfig, resetSteps);
+  };
+
+  const [analyticsOpen, setAnalyticsOpen] = useState(false);
+  const [analyticsEvents, setAnalyticsEvents] = useState<AnalyticsEvent[]>([]);
+  const openAnalytics = () => {
+    setAnalyticsEvents(getAnalytics());
+    setAnalyticsOpen(true);
+  };
+  const clearAnalyticsAndClose = () => {
+    clearAnalytics();
+    setAnalyticsEvents([]);
   };
 
   return (
@@ -234,7 +278,72 @@ export default function PromptPreview({
         >
           Import Config
         </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground transition-colors duration-150"
+          onClick={openAnalytics}
+          aria-label="View local analytics"
+        >
+          Analytics
+        </Button>
       </footer>
+
+      <Dialog open={analyticsOpen} onOpenChange={setAnalyticsOpen}>
+        <DialogContent className="max-h-[80vh] max-w-md overflow-hidden flex flex-col" showCloseButton>
+          <DialogHeader>
+            <DialogTitle>Local analytics</DialogTitle>
+            <p className="text-muted-foreground text-sm">
+              Last {analyticsEvents.length} events (stored in this device only).
+            </p>
+          </DialogHeader>
+          <div className="min-h-0 flex-1 overflow-y-auto rounded-none border border-border bg-muted/20 p-2">
+            {analyticsEvents.length === 0 ? (
+              <p className="text-muted-foreground py-4 text-center text-sm">No events yet.</p>
+            ) : (
+              <ul className="space-y-2 text-xs">
+                {analyticsEvents.map((evt, i) => (
+                  <li
+                    key={`${evt.timestamp}-${i}`}
+                    className="rounded-none border border-border bg-background p-2 font-mono"
+                  >
+                    <span className="font-semibold">{evt.name}</span>
+                    <span className="text-muted-foreground ml-2">
+                      {new Date(evt.timestamp).toLocaleString()}
+                    </span>
+                    {evt.payload != null && Object.keys(evt.payload).length > 0 && (
+                      <pre className="mt-1 overflow-x-auto whitespace-pre-wrap break-words text-[10px]">
+                        {JSON.stringify(evt.payload)}
+                      </pre>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <DialogFooter showCloseButton={false}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={clearAnalyticsAndClose}
+              aria-label="Clear analytics data"
+            >
+              Clear
+            </Button>
+            <Button
+              type="button"
+              variant="default"
+              size="sm"
+              onClick={() => setAnalyticsOpen(false)}
+              aria-label="Close"
+            >
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

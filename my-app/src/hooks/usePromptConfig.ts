@@ -8,6 +8,7 @@ import {
   DEFAULT_CONFIG,
   normalizePromptConfig,
 } from "@/lib/types";
+import { trackEvent } from "@/lib/analytics";
 
 const STORAGE_KEY = "promptus-prompt-config";
 const STEP_STORAGE_KEY = "promptforge-current-step";
@@ -194,6 +195,7 @@ export function usePromptConfig() {
   const maxStep = getVibecodingMaxStep(config.components);
 
   const nextStep = useCallback(() => {
+    trackEvent("next_step_clicked", { maxStep });
     setCurrentStep((prev) => Math.min(prev + 1, maxStep));
   }, [maxStep]);
 
