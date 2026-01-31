@@ -73,17 +73,61 @@ export function cleanPrompt(text: string): string {
 }
 
 /**
+ * Infer components to add from project description keywords.
+ * Returns components to merge (no duplicates with existing selection).
+ * - dashboard → stats, charts, table, sidebar
+ * - portfolio → features (projects), hero, footer
+ * - ecommerce → features (product grid), table, pricing
+ * - blog → features (article list)
+ */
+export function extractIntentComponents(description: string): Component[] {
+  if (!description?.trim()) return [];
+  const lower = description.toLowerCase();
+  const out: Component[] = [];
+
+  if (/\bdashboard\b/.test(lower) || /\banalytics\b/.test(lower) || /\bdata\s*(heavy|viz|table)\b/.test(lower)) {
+    out.push("sidebar", "stats", "charts", "table");
+  }
+  if (/\bportfolio\b/.test(lower) || /\bprojects\b/.test(lower) || /\bskills\b/.test(lower) || /\bcontact\b/.test(lower)) {
+    out.push("hero", "features", "footer");
+  }
+  if (/\becommerce\b/.test(lower) || /\bstore\b/.test(lower) || /\bproduct\s*grid\b/.test(lower) || /\bcart\b/.test(lower) || /\bshop\b/.test(lower)) {
+    out.push("features", "table", "pricing");
+  }
+  if (/\bblog\b/.test(lower) || /\barticles?\b/.test(lower) || /\bposts\b/.test(lower)) {
+    out.push("features");
+  }
+
+  return [...new Set(out)];
+}
+
+/**
+ * Merge user-selected components with intent-inferred ones, no duplicates.
+ */
+function mergeComponents(selected: Component[], inferred: Component[]): Component[] {
+  const seen = new Set(selected);
+  for (const c of inferred) {
+    seen.add(c);
+  }
+  return [...seen];
+}
+
+/**
  * Generate final prompt text from config: template + placeholder replacement + cleanup.
+ * Uses projectDescription for "User Intent" and merges inferred components from description.
  */
 export function generatePrompt(config: PromptConfig): string {
   const template = getTemplate(config.builderMode);
 
-  const componentsList = formatComponents(config.components);
-  const componentDetails = buildComponentDetails(config.components);
+  const inferred = extractIntentComponents(config.projectDescription ?? "");
+  const components = mergeComponents(config.components, inferred);
+
+  const componentsList = formatComponents(components);
+  const componentDetails = buildComponentDetails(components);
 
   const descriptionBlock =
     config.projectDescription?.trim() ?
-      `## User context\n${config.projectDescription.trim()}\n\n`
+      `## User Intent\n"${config.projectDescription.trim()}"\n\n`
     : "";
 
   const replacements: Record<string, string> = {
