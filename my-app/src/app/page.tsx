@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
+import { BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import { usePromptConfig } from "@/hooks/usePromptConfig";
-import { generatePrompt } from "@/lib/prompt-generator";
-import { copyToClipboard } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import ConfigPanel from "@/components/builder/ConfigPanel";
 import PromptPreview from "@/components/builder/PromptPreview";
@@ -17,12 +17,7 @@ export default function Home() {
     resetSteps,
   } = usePromptConfig();
 
-  const handleCopy = () => {
-    const prompt = generatePrompt(config);
-    copyToClipboard(prompt).then((ok) =>
-      ok ? toast.success("Prompt copied") : toast.error("Failed to copy")
-    );
-  };
+  
 
   return (
     <main className="flex h-screen flex-col overflow-hidden bg-background">
@@ -36,15 +31,18 @@ export default function Home() {
           <span className="text-sm text-muted-foreground">AI Prompt Builder</span>
         </div>
         <nav className="flex items-center gap-3">
-          <Button
-            type="button"
-            size="sm"
-            className="rounded-xl bg-secondary font-medium text-secondary-foreground shadow-sm hover:bg-secondary/90"
-            onClick={handleCopy}
-            aria-label="Copy prompt"
-          >
-            Copy prompt
-          </Button>
+          <Link href="/docs">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="rounded-xl border-border bg-card font-medium shadow-sm hover:bg-muted/50"
+              aria-label="View documentation"
+            >
+              <BookOpen className="mr-1.5 size-4" aria-hidden />
+              Docs
+            </Button>
+          </Link>
         </nav>
       </header>
 
