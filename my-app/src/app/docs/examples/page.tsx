@@ -1,4 +1,5 @@
 import DocsContent from "@/components/docs/DocsContent";
+import CopyBlock from "@/components/docs/CopyBlock";
 
 export default function ExamplesPage() {
   return (
@@ -7,7 +8,8 @@ export default function ExamplesPage() {
       <p>
         See how Promptus prompts translate into real builds. Each example shows
         a typical use case: what you describe, what structure you get, and how
-        to use it in your builder.
+        to use it in your builder. Copy the example prompts below to try them
+        in the app.
       </p>
 
       <h2>SaaS Landing Page</h2>
@@ -15,12 +17,11 @@ export default function ExamplesPage() {
         A marketing page for a B2B product with clear value proposition and
         conversion focus.
       </p>
+      <CopyBlock
+        label="Example project description"
+        content={`SaaS tool for team analytics. Need a landing page with hero, features grid, pricing tiers, testimonials, and contact CTA.`}
+      />
       <ul>
-        <li>
-          <strong>Example description:</strong> &quot;SaaS tool for team
-          analytics. Need a landing page with hero, features grid, pricing
-          tiers, testimonials, and contact CTA.&quot;
-        </li>
         <li>
           <strong>Generated structure:</strong> Hero with headline and CTA,
           features section (3–6 items), pricing table or cards, testimonial
@@ -39,12 +40,11 @@ export default function ExamplesPage() {
         Simple one-section page to collect emails and explain the product in a
         few lines.
       </p>
+      <CopyBlock
+        label="Example project description"
+        content={`AI writing assistant launching soon. Waitlist page with short pitch and email signup.`}
+      />
       <ul>
-        <li>
-          <strong>Intent:</strong> Describe your startup and that you need a
-          waitlist page (e.g. &quot;AI writing assistant launching soon.
-          Waitlist page with short pitch and email signup&quot;).
-        </li>
         <li>
           <strong>Components:</strong> Hero (or single section) with headline,
           subtext, and email input; optional logo and social links. Minimal
@@ -52,9 +52,7 @@ export default function ExamplesPage() {
         </li>
         <li>
           <strong>Builder output:</strong> A focused page you can deploy and
-          hook up to a mailing list or form backend. Add &quot;waitlist&quot;
-          or &quot;coming soon&quot; in the description so the prompt stays
-          minimal and on-message.
+          hook up to a mailing list or form backend.
         </li>
       </ul>
 
@@ -63,12 +61,11 @@ export default function ExamplesPage() {
         Personal site to showcase projects, skills, and contact. Promptus
         helps you get a clean, scannable layout.
       </p>
+      <CopyBlock
+        label="Example project description"
+        content={`Developer portfolio: about me, skills, project cards with links and tech stack, contact form.`}
+      />
       <ul>
-        <li>
-          <strong>Example description:</strong> &quot;Developer portfolio: about
-          me, skills, project cards with links and tech stack, contact
-          form.&quot;
-        </li>
         <li>
           <strong>How prompts create the layout:</strong> The app suggests
           sections like hero, about, projects grid, and contact. You pick
@@ -88,12 +85,11 @@ export default function ExamplesPage() {
         Internal tool or admin UI with sidebar, stats, tables, and charts.
         Ideal for a step-by-step Vibecoding flow.
       </p>
+      <CopyBlock
+        label="Example project description"
+        content={`Analytics dashboard: sidebar nav, header, KPI cards, chart area, data table with filters.`}
+      />
       <ul>
-        <li>
-          <strong>Example description:</strong> &quot;Analytics dashboard:
-          sidebar nav, header, KPI cards, chart area, data table with
-          filters.&quot;
-        </li>
         <li>
           <strong>Dashboard Vibecoding flow:</strong> Choose the Vibecoding
           builder and a dashboard-style preset. Promptus outputs a prompt

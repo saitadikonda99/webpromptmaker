@@ -266,6 +266,12 @@
   color: inherit;
 }
 
+/* CopyBlock — inherits docs code vars when inside .docs-content */
+.docs-content .docs-copy-block pre {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  -webkit-overflow-scrolling: touch;
+}
+
 .docs-content hr {
   border: none;
   border-top: 1px solid var(--border);
