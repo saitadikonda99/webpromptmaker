@@ -61,7 +61,7 @@ export default function DocsLayout({
 
       {/* Main content */}
       <main className="min-h-0 flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-3xl px-4 py-8 md:px-8 md:py-10">
+        <div className="max-w-3xl px-4 py-8 md:px-8 md:py-10">
           {children}
         </div>
       </main>

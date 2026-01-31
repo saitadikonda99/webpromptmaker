@@ -13,7 +13,7 @@ export default function DocsContent({ children, className }: DocsContentProps) {
   return (
     <article
       className={cn(
-        "docs-content w-full max-w-[800px] mx-auto",
+        "docs-content w-full max-w-[800px]",
         "leading-relaxed text-foreground",
         className
       )}
