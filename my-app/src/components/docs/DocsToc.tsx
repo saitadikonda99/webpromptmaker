@@ -70,6 +70,11 @@ export default function DocsToc({ className }: DocsTocProps) {
     const raf1Id = requestAnimationFrame(() => {
       raf2Id = requestAnimationFrame(scanHeadings);
     });
+    // Extra rescan for /docs index so "On this page" reliably shows Quick Start + Documentation Sections
+    const timeoutId =
+      pathname === "/docs"
+        ? window.setTimeout(scanHeadings, 150)
+        : undefined;
     const container = document.getElementById(CONTENT_ID);
     const mo = container
       ? new MutationObserver(() => {
@@ -82,6 +87,7 @@ export default function DocsToc({ className }: DocsTocProps) {
     return () => {
       cancelAnimationFrame(raf1Id);
       if (raf2Id !== null) cancelAnimationFrame(raf2Id);
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
       mo?.disconnect();
     };
   }, [pathname]);
@@ -184,11 +190,11 @@ export default function DocsToc({ className }: DocsTocProps) {
             href={`#${id}`}
             onClick={(e) => handleClick(e, id)}
             className={cn(
-              "block text-sm transition-colors duration-150 -ml-px",
+              "block rounded-r py-1.5 pr-2 text-sm transition-colors duration-150 -ml-px",
               level === 3 && "pl-3",
               activeId === id
-                ? "font-medium text-primary border-l-2 border-primary pl-3"
-                : "text-muted-foreground hover:text-foreground border-l-2 border-transparent pl-3"
+                ? "font-medium text-primary border-l-2 border-primary pl-3 bg-primary/5"
+                : "border-l-2 border-transparent pl-3 text-muted-foreground hover:bg-muted/50 hover:text-foreground"
             )}
           >
             {text}
