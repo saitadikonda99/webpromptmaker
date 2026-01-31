@@ -11,19 +11,12 @@ export default function Home() {
     <main className="flex h-screen flex-col md:flex-row overflow-hidden">
       {/* Left: Configuration */}
       <section className="flex flex-col w-full md:w-[60%] min-h-0 border-r border-border">
-        <h2 className="shrink-0 px-4 py-3 text-sm font-medium text-muted-foreground border-b border-border bg-muted/30">
-          Configuration
-        </h2>
-        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
-          <div className="p-4">
-            <ConfigPanel
-              config={config}
-              updateConfig={updateConfig}
-              toggleComponent={toggleComponent}
-              resetConfig={resetConfig}
-            />
-          </div>
-        </div>
+        <ConfigPanel
+          config={config}
+          updateConfig={updateConfig}
+          toggleComponent={toggleComponent}
+          resetConfig={resetConfig}
+        />
       </section>
 
       {/* Right: Generated Prompt */}
