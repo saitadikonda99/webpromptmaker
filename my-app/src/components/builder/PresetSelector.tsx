@@ -4,7 +4,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import type { PromptConfig } from "@/lib/types";
 import { applyPreset, type PresetKey, PRESETS } from "@/lib/presets";
-import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 export interface PresetSelectorProps {
@@ -38,7 +37,6 @@ export default function PresetSelector({
     const next = applyPreset(config, PRESETS[key]);
     updateConfig(next);
     setActiveKey(key);
-    trackEvent("preset_applied", { preset: key });
     toast.success("Preset applied");
   }
 

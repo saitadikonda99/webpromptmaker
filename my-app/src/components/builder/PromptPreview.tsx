@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { toast } from "sonner";
 import type { BuilderMode, PromptConfig } from "@/lib/types";
 import { parseImportedConfig } from "@/lib/types";
-import { trackEvent } from "@/lib/analytics";
 import { generatePrompt } from "@/lib/prompt-generator";
 import { copyToClipboard } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
@@ -38,12 +37,8 @@ const BUILDER_MODE_OPTIONS: { value: BuilderMode; label: string }[] = [
 
 function handleCopy(prompt: string): void {
   copyToClipboard(prompt).then((ok) => {
-    if (ok) {
-      trackEvent("prompt_copied");
-      toast.success("Copied to clipboard");
-    } else {
-      toast.error("Failed to copy");
-    }
+    if (ok) toast.success("Copied to clipboard");
+    else toast.error("Failed to copy");
   });
 }
 
@@ -66,10 +61,7 @@ function handleShare(config: PromptConfig): void {
     const encoded = encodeURIComponent(base64);
     const url = `${window.location.origin}${window.location.pathname}?config=${encoded}`;
     navigator.clipboard.writeText(url).then(
-      () => {
-        trackEvent("share_link_created");
-        toast.success("Share link copied to clipboard");
-      },
+      () => toast.success("Share link copied to clipboard"),
       () => toast.error("Failed to copy link")
     );
   } catch {
@@ -87,7 +79,6 @@ function handleExportConfig(config: PromptConfig): void {
     a.download = EXPORT_FILENAME;
     a.click();
     URL.revokeObjectURL(url);
-    trackEvent("config_exported");
     toast.success("Configuration exported.");
   } catch {
     toast.error("Failed to export configuration");
@@ -107,7 +98,6 @@ function handleImportConfig(
       if (parsed) {
         setConfig(parsed);
         resetSteps();
-        trackEvent("config_imported");
         toast.success("Configuration imported.");
       } else {
         toast.error("Invalid configuration file.");
@@ -129,18 +119,6 @@ export default function PromptPreview({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const prompt = useMemo(() => generatePrompt(config), [config]);
   const charCount = prompt.length;
-
-  useEffect(() => {
-    if (prompt.length > 0) {
-      trackEvent("prompt_generated", { componentCount: config.components.length });
-    }
-  }, [
-    config.components,
-    config.pageType,
-    config.framework,
-    config.builderMode,
-    prompt,
-  ]);
 
   const onImportClick = () => fileInputRef.current?.click();
   const onImportChange = (e: React.ChangeEvent<HTMLInputElement>) => {

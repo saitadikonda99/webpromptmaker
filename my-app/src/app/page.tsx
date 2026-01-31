@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { toast } from "sonner";
 import { usePromptConfig } from "@/hooks/usePromptConfig";
 import { generatePrompt } from "@/lib/prompt-generator";
@@ -37,17 +36,6 @@ export default function Home() {
           <span className="text-sm text-muted-foreground">AI Prompt Builder</span>
         </div>
         <nav className="flex items-center gap-3">
-          <Link href="/analytics">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="rounded-xl border-border bg-card font-medium shadow-sm hover:bg-muted/50"
-              aria-label="View analytics"
-            >
-              Analytics
-            </Button>
-          </Link>
           <Button
             type="button"
             size="sm"
