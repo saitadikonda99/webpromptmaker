@@ -102,6 +102,9 @@ const VALID_CODE_STRUCTURES: readonly CodeStructure[] = ["single-file", "compone
 export interface PromptConfig {
   version: "1.0";
 
+  /** Optional free-form description; used to tailor generated prompts. */
+  projectDescription: string;
+
   framework: Framework;
   cssFramework: CssFramework;
 
@@ -130,12 +133,14 @@ export interface PromptConfig {
 
 export const DEFAULT_CONFIG: PromptConfig = {
     version: "1.0",
-  
+
+    projectDescription: "",
+
     framework: "nextjs",
     cssFramework: "tailwind",
-  
+
     pageType: "landing",
-  
+
     components: ["navbar", "hero", "features", "footer"],
   
     theme: "system",
@@ -168,6 +173,9 @@ export function parseImportedConfig(raw: unknown): PromptConfig | null {
     const merged = { ...DEFAULT_CONFIG } as Record<string, unknown>;
 
     if (obj.version === "1.0") merged.version = "1.0";
+    if (typeof obj.projectDescription === "string") {
+      merged.projectDescription = obj.projectDescription;
+    }
     if (
       typeof obj.framework === "string" &&
       (VALID_FRAMEWORKS as readonly string[]).includes(obj.framework)

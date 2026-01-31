@@ -47,7 +47,7 @@ export default function StyleSection({
               updateConfig({ designStyle: value as DesignStyle })
             }
           >
-            <SelectTrigger id="design-style" className="w-full rounded-xl border-2 border-border">
+            <SelectTrigger id="design-style" className="w-full rounded-xl border-2 border-border my-2">
               <SelectValue placeholder="Select style" />
             </SelectTrigger>
             <SelectContent>
@@ -63,7 +63,7 @@ export default function StyleSection({
         {/* Features: button-style options (same as Framework / tech stack) */}
         <div className="space-y-3">
           <span className="text-sm font-medium text-foreground">Features</span>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 my-2">
             {FEATURE_TOGGLES.map(({ key, label }) => {
               const isSelected = config[key];
               return (

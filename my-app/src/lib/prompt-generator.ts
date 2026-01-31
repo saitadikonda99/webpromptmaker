@@ -81,7 +81,13 @@ export function generatePrompt(config: PromptConfig): string {
   const componentsList = formatComponents(config.components);
   const componentDetails = buildComponentDetails(config.components);
 
+  const descriptionBlock =
+    config.projectDescription?.trim() ?
+      `## User context\n${config.projectDescription.trim()}\n\n`
+    : "";
+
   const replacements: Record<string, string> = {
+    [PLACEHOLDERS.PROJECT_DESCRIPTION]: descriptionBlock,
     [PLACEHOLDERS.PAGE_TYPE]: config.pageType,
     [PLACEHOLDERS.FRAMEWORK]: formatFramework(config.framework),
     [PLACEHOLDERS.CSS_FRAMEWORK]: formatCssFramework(config.cssFramework),

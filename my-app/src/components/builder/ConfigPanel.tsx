@@ -1,7 +1,8 @@
 "use client";
 
 import type { Component, PromptConfig } from "@/lib/types";
-import { LayoutGrid, Braces, Layers, Palette, Sparkles } from "lucide-react";
+import { FileText, LayoutGrid, Braces, Layers, Palette, Sparkles } from "lucide-react";
+import ProjectDescription from "@/components/builder/ProjectDescription";
 import PresetSelector from "@/components/builder/PresetSelector";
 import FrameworkSection from "@/components/sections/FrameworkSection";
 import ComponentSection from "@/components/sections/ComponentSection";
@@ -23,6 +24,17 @@ export default function ConfigPanel({
 }: ConfigPanelProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col divide-y divide-border/60">
+      {/* Project description — top of config */}
+      <section className="p-5">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <FileText className="size-4 text-primary" aria-hidden />
+            Project
+          </h3>
+        </div>
+        <ProjectDescription config={config} updateConfig={updateConfig} />
+      </section>
+
       {/* Preset Section */}
       <section className="p-5">
         <div className="mb-4 flex items-center justify-between">

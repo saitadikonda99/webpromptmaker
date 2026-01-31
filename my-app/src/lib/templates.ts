@@ -1,6 +1,7 @@
 import type { BuilderMode } from "./types";
 
 const PLACEHOLDERS = {
+  PROJECT_DESCRIPTION: "{{PROJECT_DESCRIPTION}}",
   PAGE_TYPE: "{{PAGE_TYPE}}",
   FRAMEWORK: "{{FRAMEWORK}}",
   CSS_FRAMEWORK: "{{CSS_FRAMEWORK}}",
@@ -18,7 +19,7 @@ const PLACEHOLDERS = {
 } as const;
 
 const BASE_BODY = `
-## Project Overview
+{{PROJECT_DESCRIPTION}}## Project Overview
 **Page type:** {{PAGE_TYPE}}
 **Stack:** {{FRAMEWORK}} + {{CSS_FRAMEWORK}}
 **Theme:** {{THEME}} · Primary: {{PRIMARY_COLOR}} · Accent: {{ACCENT_COLOR}} · Style: {{DESIGN_STYLE}}
