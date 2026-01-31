@@ -9,6 +9,52 @@ import {
 
 const STORAGE_KEY = "promptus-prompt-config";
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((v) => typeof v === "string");
+}
+
+/**
+ * Light validation: ensure parsed data has required shape. Merges with DEFAULT_CONFIG
+ * so missing or invalid fields are replaced. Returns null if parsing fails or shape is invalid.
+ */
+export function decodeConfig(encoded: string): PromptConfig | null {
+  try {
+    const decoded = decodeURIComponent(encoded);
+    const raw = atob(decoded);
+    const parsed = JSON.parse(raw) as unknown;
+    if (!isPlainObject(parsed)) return null;
+    if (!("version" in parsed) || !("framework" in parsed) || !("components" in parsed)) return null;
+    if (!isStringArray(parsed.components)) return null;
+    return { ...DEFAULT_CONFIG, ...parsed } as PromptConfig;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Encode config to base64 for URL or clipboard. Safe for UTF-8.
+ */
+export function encodeConfig(config: PromptConfig): string {
+  const json = JSON.stringify(config);
+  return btoa(unescape(encodeURIComponent(json)));
+}
+
+function getConfigFromUrl(): PromptConfig | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get("config");
+    if (!encoded) return null;
+    return decodeConfig(encoded);
+  } catch {
+    return null;
+  }
+}
+
 function loadConfigFromStorage(): PromptConfig {
   if (typeof window === "undefined") return DEFAULT_CONFIG;
   try {
@@ -16,12 +62,11 @@ function loadConfigFromStorage(): PromptConfig {
     if (!raw) return DEFAULT_CONFIG;
     const parsed = JSON.parse(raw) as unknown;
     if (
-      parsed &&
-      typeof parsed === "object" &&
+      isPlainObject(parsed) &&
       "version" in parsed &&
       "framework" in parsed &&
       "components" in parsed &&
-      Array.isArray(parsed.components)
+      isStringArray(parsed.components)
     ) {
       return { ...DEFAULT_CONFIG, ...parsed } as PromptConfig;
     }
@@ -45,12 +90,17 @@ export function usePromptConfig() {
   const [config, setConfigState] = useState<PromptConfig>(DEFAULT_CONFIG);
   const skipNextSave = useRef(true);
 
-  // After mount, load from localStorage (client-only).
+  // On mount: load from URL first, then localStorage, else keep default. Do not auto-update URL.
   useEffect(() => {
-    setConfigState(loadConfigFromStorage());
+    const urlConfig = getConfigFromUrl();
+    if (urlConfig) {
+      setConfigState(urlConfig);
+    } else {
+      setConfigState(loadConfigFromStorage());
+    }
   }, []);
 
-  // Persist on change; skip the first run to avoid overwriting storage before load runs.
+  // Persist to localStorage on change; skip first run to avoid overwriting before load.
   useEffect(() => {
     if (skipNextSave.current) {
       skipNextSave.current = false;
