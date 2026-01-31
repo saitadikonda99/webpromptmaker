@@ -29,7 +29,7 @@ export default function DocsSidebar({
         className
       )}
     >
-      <div className="flex flex-col gap-1 overflow-y-auto px-3 pb-8 pt-4">
+      <div className="flex flex-col gap-1 overflow-y-auto scrollbar-hide px-3 pb-8 pt-4">
         <Link
           href="/"
           className="mb-1 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"

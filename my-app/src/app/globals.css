@@ -125,6 +125,16 @@
   }
 }
 
+/* Hide scrollbar while keeping scroll */
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
 /* Docs content typography */
 .docs-content {
   --docs-code-bg: oklch(0.96 0.005 90);

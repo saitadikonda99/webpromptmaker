@@ -16,11 +16,11 @@ export default function DocsLayout({
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-background md:flex-row">
-      {/* Sidebar: full height on desktop, fixed overlay on mobile */}
+    <div className="flex h-screen flex-col overflow-hidden bg-background lg:flex-row">
+      {/* Sidebar: drawer on mobile/tablet, visible only from lg so docs content gets full width until then */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 shrink-0 transition-transform duration-200 ease-out md:sticky md:top-0 md:h-screen md:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 w-64 shrink-0 transition-transform duration-200 ease-out lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -31,12 +31,12 @@ export default function DocsLayout({
         />
       </div>
 
-      {/* Overlay when sidebar open on mobile */}
+      {/* Overlay when sidebar open on mobile/tablet (hidden at lg when sidebar is in flow) */}
       {sidebarOpen && (
         <button
           type="button"
           aria-label="Close sidebar"
-          className="fixed inset-0 z-30 bg-black/20 transition-opacity md:hidden"
+          className="fixed inset-0 z-30 bg-black/20 transition-opacity lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -51,7 +51,7 @@ export default function DocsLayout({
         <div className="flex min-h-0 flex-1 gap-0 overflow-hidden lg:gap-4">
           <div
             id="docs-content"
-            className="min-h-0 min-w-0 flex-1 overflow-y-auto px-4 py-8 md:px-8 md:py-10 max-w-3xl"
+            className="min-h-0 min-w-0 flex-1 overflow-y-auto scrollbar-hide px-4 py-8 md:px-8 md:py-10 max-w-3xl"
           >
             {children}
             <DocsPageNav />
