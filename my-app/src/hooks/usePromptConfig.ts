@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   type Component,
   type PromptConfig,
@@ -9,6 +10,37 @@ import {
 } from "@/lib/types";
 
 const STORAGE_KEY = "promptus-prompt-config";
+const STEP_STORAGE_KEY = "promptforge-current-step";
+
+const MIN_STEP = 1;
+
+function loadStepFromStorage(): number {
+  if (typeof window === "undefined") return MIN_STEP;
+  try {
+    const raw = localStorage.getItem(STEP_STORAGE_KEY);
+    if (raw == null) return MIN_STEP;
+    const n = Number(raw);
+    if (!Number.isInteger(n) || n < MIN_STEP) return MIN_STEP;
+    return n;
+  } catch {
+    return MIN_STEP;
+  }
+}
+
+function saveStepToStorage(step: number): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(STEP_STORAGE_KEY, String(step));
+  } catch {
+    // Ignore storage errors
+  }
+}
+
+/** Major config fingerprint: preset/pageType/framework/components. Used to reset steps only on structural changes. */
+function getMajorConfigFingerprint(config: PromptConfig): string {
+  const componentsKey = config.components.slice().sort().join(",");
+  return [config.pageType, config.framework, componentsKey, config.builderMode].join("|");
+}
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -86,10 +118,18 @@ function saveConfigToStorage(config: PromptConfig): void {
   }
 }
 
+/** Max vibecoding step count: layout + one per component + polish. */
+function getVibecodingMaxStep(components: Component[]): number {
+  return Math.max(MIN_STEP, components.length + 2);
+}
+
 export function usePromptConfig() {
   // Initialize with DEFAULT_CONFIG so server and client first paint match (avoids hydration mismatch).
   const [config, setConfigState] = useState<PromptConfig>(DEFAULT_CONFIG);
   const skipNextSave = useRef(true);
+
+  // Step state: load from localStorage on mount; default to 1 if missing or invalid.
+  const [currentStep, setCurrentStep] = useState<number>(MIN_STEP);
 
   // On mount: load from URL first, then localStorage, else keep default. Do not auto-update URL.
   useEffect(() => {
@@ -99,6 +139,7 @@ export function usePromptConfig() {
     } else {
       setConfigState(loadConfigFromStorage());
     }
+    setCurrentStep(loadStepFromStorage());
   }, []);
 
   // Persist to localStorage on change; skip first run to avoid overwriting before load.
@@ -109,6 +150,28 @@ export function usePromptConfig() {
     }
     saveConfigToStorage(config);
   }, [config]);
+
+  // Reset step when MAJOR config changes (preset/pageType/framework/components). Compare previous fingerprint to prevent infinite resets.
+  // Do NOT reset on minor edits: colors, theme, animations, design style, responsive, accessibility, seo, outputFormat.
+  const majorFingerprintRef = useRef<string>("");
+  const hasSeenConfigRef = useRef(false);
+  useEffect(() => {
+    const fingerprint = getMajorConfigFingerprint(config);
+    const changed = majorFingerprintRef.current !== fingerprint;
+    majorFingerprintRef.current = fingerprint;
+
+    if (hasSeenConfigRef.current && changed) {
+      setCurrentStep(MIN_STEP);
+      saveStepToStorage(MIN_STEP);
+      toast.info("Flow restarted due to major configuration change.");
+    }
+    hasSeenConfigRef.current = true;
+  }, [config.pageType, config.framework, config.components, config.builderMode]);
+
+  // Persist current step to localStorage when it changes.
+  useEffect(() => {
+    saveStepToStorage(currentStep);
+  }, [currentStep]);
 
   const setConfig = useCallback((value: PromptConfig | ((prev: PromptConfig) => PromptConfig)) => {
     setConfigState(value);
@@ -128,8 +191,21 @@ export function usePromptConfig() {
     });
   }, []);
 
+  const maxStep = getVibecodingMaxStep(config.components);
+
+  const nextStep = useCallback(() => {
+    setCurrentStep((prev) => Math.min(prev + 1, maxStep));
+  }, [maxStep]);
+
+  const resetSteps = useCallback(() => {
+    setCurrentStep(MIN_STEP);
+    saveStepToStorage(MIN_STEP);
+  }, []);
+
   const resetConfig = useCallback(() => {
     setConfigState(DEFAULT_CONFIG);
+    setCurrentStep(MIN_STEP);
+    saveStepToStorage(MIN_STEP);
   }, []);
 
   return {
@@ -138,5 +214,8 @@ export function usePromptConfig() {
     updateConfig,
     toggleComponent,
     resetConfig,
+    currentStep,
+    nextStep,
+    resetSteps,
   };
 }
