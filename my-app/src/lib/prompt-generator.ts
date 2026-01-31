@@ -65,6 +65,16 @@ function buildComponentDetails(components: Component[]): string {
     .join("\n");
 }
 
+/** Build numbered implementation steps for vibecoding (setup → each section → polish). */
+function buildImplementationSteps(components: Component[]): string {
+  const lines: string[] = ["Step 1: Setup layout and project structure"];
+  components.forEach((c, i) => {
+    lines.push(`Step ${i + 2}: Create ${componentLabel(c)}`);
+  });
+  lines.push(`Step ${components.length + 2}: Polish UI (responsive, accessibility, final touches)`);
+  return lines.join("\n");
+}
+
 /** Remove repeated blank lines; keep at most one newline between lines. */
 export function cleanPrompt(text: string): string {
   return text
@@ -80,6 +90,7 @@ export function generatePrompt(config: PromptConfig): string {
 
   const componentsList = formatComponents(config.components);
   const componentDetails = buildComponentDetails(config.components);
+  const implementationSteps = buildImplementationSteps(config.components);
 
   const replacements: Record<string, string> = {
     [PLACEHOLDERS.PAGE_TYPE]: config.pageType,
@@ -91,6 +102,7 @@ export function generatePrompt(config: PromptConfig): string {
     [PLACEHOLDERS.DESIGN_STYLE]: config.designStyle,
     [PLACEHOLDERS.COMPONENTS_LIST]: componentsList,
     [PLACEHOLDERS.COMPONENT_DETAILS]: componentDetails,
+    [PLACEHOLDERS.IMPLEMENTATION_STEPS]: implementationSteps,
     [PLACEHOLDERS.RESPONSIVE]: config.responsive ? "Responsive (mobile-first)" : "Fixed layout",
     [PLACEHOLDERS.ANIMATIONS]: config.animations ? "Include subtle animations" : "No animations",
     [PLACEHOLDERS.ACCESSIBILITY]: config.accessibility ? "WCAG-aware, semantic HTML, ARIA where needed" : "Basic markup",
